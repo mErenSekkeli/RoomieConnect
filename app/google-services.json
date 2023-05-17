@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "863135842487",
+    "project_id": "roomieconnectdb",
+    "storage_bucket": "roomieconnectdb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863135842487:android:f1268fdab9d7bf44100d32",
+        "android_client_info": {
+          "package_name": "com.erensekkeli.roomieconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863135842487-2k22j1qmobp53u2umbks6pe2m9jm7g3u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6BU2nLZr8Sgwtf-TpKsI_H5rUELz3Z_0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863135842487-2k22j1qmobp53u2umbks6pe2m9jm7g3u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,8 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.RoomieConnect" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/turquoise</item>
+        <item name="colorSecondary">@color/light_purple</item>
+    </style>
+    <style name="Theme.RoomieConnect" parent="Base.Theme.RoomieConnect" />
+</resources>
