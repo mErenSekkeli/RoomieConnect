@@ -3,17 +3,20 @@ package com.erensekkeli.roomieconnect.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.erensekkeli.roomieconnect.R
 import com.erensekkeli.roomieconnect.activities.FeedActivity
 import com.erensekkeli.roomieconnect.databinding.MediaItemBinding
+import com.erensekkeli.roomieconnect.databinding.SearchResultItemBinding
 import com.erensekkeli.roomieconnect.fragments.MediaDetailFragment
 import com.erensekkeli.roomieconnect.fragments.ProfileDetailFragment
 import com.erensekkeli.roomieconnect.models.Media
@@ -27,51 +30,42 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 
-class MediaListAdapter(val mediaList: ArrayList<Media>, var fragmentType: Int = 0): RecyclerView.Adapter<MediaListAdapter.MediaViewHolder>(){
+class MediaListAdapter(val userList: ArrayList<User>, var fragmentType: Int = 0): RecyclerView.Adapter<MediaListAdapter.MediaViewHolder>(){
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
-    private lateinit var storage: FirebaseStorage
 
-    class MediaViewHolder(val binding: MediaItemBinding): RecyclerView.ViewHolder(binding.root) {
+    class MediaViewHolder(val binding: SearchResultItemBinding): RecyclerView.ViewHolder(binding.root) {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
-        auth = Firebase.auth
-        firestore = Firebase.firestore
-        storage = Firebase.storage
-        val binding = MediaItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = SearchResultItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MediaViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
-        return mediaList.size
-    }
-
-    private fun changeTimestampToStringDate(timestamp: Timestamp): String {
-        val date = timestamp.toDate()
-        val simpleDateFormat = android.icu.text.SimpleDateFormat("dd/MM/yyyy")
-        return simpleDateFormat.format(date)
+        return userList.size
     }
 
 
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
-        val media = mediaList[position]
-        holder.binding.mediaTitle.text = media.title ?: ""
-        holder.binding.mediaDescription.text = media.description ?: ""
-        holder.binding.mediaCreatadDate.text = changeTimestampToStringDate(media.date!!)
-        if(media.mediaType == "video"){
-            holder.binding.mediaPlayButton.visibility = ViewGroup.VISIBLE
+        holder.binding.nameSurnameResult.text = userList[position].name + " " + userList[position].surname
+        val imageUri: Uri? = userList[position].profileImage?.toUri()
+        if(imageUri != null) {
+            Glide.with(holder.itemView.context).load(imageUri).into(holder.binding.profileImageResult)
+        }else {
+            Glide.with(holder.itemView.context).load(R.drawable.app_icon).into(holder.binding.profileImageResult)
         }
-
-        Glide.with(holder.itemView.context).load(media.mediaUrl).override(1024, 768)
-            .into(holder.binding.mediaImage)
-
-        holder.binding.mediaImage.setOnClickListener {
+        holder.binding.statusResult.text = when(userList[position].status) {
+            0 -> holder.itemView.context.getString(R.string.hi) + " " +  holder.itemView.context.getString(R.string.status_0)
+            1 -> holder.itemView.context.getString(R.string.hi) + " " + holder.itemView.context.getString(R.string.status_1)
+            2 -> holder.itemView.context.getString(R.string.hi) + " " + holder.itemView.context.getString(R.string.status_2)
+            else -> holder.itemView.context.getString(R.string.hi) + " " + holder.itemView.context.getString(R.string.status_0)
+        }
+        holder.binding.departmentResult.text = userList[position].department
+        holder.binding.gradeYearResult.text = userList[position].gradeYear.toString()
+        holder.itemView.setOnClickListener {
             val bundle = Bundle()
-            bundle.putSerializable("media", media)
-
-            val fragment = MediaDetailFragment()
+            bundle.putSerializable("user", userList[position])
+            val fragment = ProfileDetailFragment()
             fragment.arguments = bundle
             val transaction = (holder.itemView.context as FeedActivity).supportFragmentManager.beginTransaction()
             transaction.setCustomAnimations(
@@ -85,115 +79,6 @@ class MediaListAdapter(val mediaList: ArrayList<Media>, var fragmentType: Int = 
             transaction.commit()
         }
 
-        firestore.collection("UserData").whereEqualTo("email", media.email).get()
-            .addOnSuccessListener { documents ->
-                if(documents.size() > 0) {
-                    val document = documents.documents[0]
-                    holder.binding.mediaUsername.text = document.getString("name") + " " + document.getString("surname")
-                    Glide.with(holder.itemView.context).load(document.getString("profileImage")).into(holder.binding.mediaProfileImage)
-
-                    holder.binding.mediaUsername.setOnClickListener {
-                        val bundle = Bundle()
-                        val user = User(document.getString("name")!!, document.getString("surname")!!, document.getString("contactMail"), document.getString("contactPhone"), document.getString("department"),
-                            document.getLong("status")?.toInt(), document.getString("profileImage"), document.getLong("campusDistance")?.toInt(),
-                            document.getLong("gradeYear")?.toInt(), document.getLong("homeTime")?.toInt())
-
-                        bundle.putSerializable("user", user)
-                        val fragment = ProfileDetailFragment()
-                        fragment.arguments = bundle
-                        val transaction = (holder.itemView.context as FeedActivity).supportFragmentManager.beginTransaction()
-                        transaction.setCustomAnimations(
-                            R.anim.enter_right_to_left,
-                            R.anim.exit_right_to_left,
-                            R.anim.enter_left_to_right,
-                            R.anim.exit_left_to_right
-                        )
-                        transaction.replace(R.id.feedContainerFragment, fragment)
-                        transaction.addToBackStack(null)
-                        transaction.commit()
-                    }
-
-                    holder.binding.mediaProfileImage.setOnClickListener {
-                        val bundle = Bundle()
-                        val user = User(document.getString("name")!!, document.getString("surname")!!, document.getString("contactMail"), document.getString("contactPhone"), document.getString("department"),
-                            document.getLong("status")?.toInt(), document.getString("profileImage"), document.getLong("campusDistance")?.toInt(),
-                            document.getLong("gradeYear")?.toInt(), document.getLong("homeTime")?.toInt())
-
-                        bundle.putSerializable("user", user)
-                        val fragment = ProfileDetailFragment()
-                        fragment.arguments = bundle
-                        val transaction = (holder.itemView.context as FeedActivity).supportFragmentManager.beginTransaction()
-                        transaction.setCustomAnimations(
-                            R.anim.enter_right_to_left,
-                            R.anim.exit_right_to_left,
-                            R.anim.enter_left_to_right,
-                            R.anim.exit_left_to_right
-                        )
-                        transaction.replace(R.id.feedContainerFragment, fragment)
-                        transaction.addToBackStack(null)
-                        transaction.commit()
-                    }
-                }
-
-            }
-
-        if(fragmentType == 1) {
-            holder.binding.deleteMedia.visibility = ViewGroup.VISIBLE
-            val reference = storage.reference
-            holder.binding.deleteMedia.setOnClickListener {
-                val alertDialog = AlertDialog.Builder(holder.itemView.context)
-                alertDialog.setTitle(R.string.delete_media)
-                alertDialog.setMessage(R.string.delete_media_message)
-                alertDialog.setPositiveButton(R.string.yes) { dialog, which ->
-                    val uuid = media.mediaUrl!!.substringAfterLast("/").split("?")[0].split("user_media")[1].replaceFirst("%2F", "/")
-                    val mediaRef = reference.child("user_media$uuid")
-                    hideProgress(holder.itemView.context)
-                    mediaRef.delete().addOnSuccessListener {
-                        firestore.collection("UserMedia").document(media.id!!).delete()
-                            .addOnSuccessListener {
-                                mediaList.removeAt(position)
-                                notifyDataSetChanged()
-                                Toast.makeText(
-                                    holder.itemView.context,
-                                    R.string.media_deleted,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                openFragment(holder.itemView.context)
-                            }.addOnFailureListener {
-                                Toast.makeText(
-                                    holder.itemView.context,
-                                    R.string.media_delete_failed,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                openFragment(holder.itemView.context)
-                            }
-                    }.addOnFailureListener {
-                        Toast.makeText(
-                            holder.itemView.context,
-                            R.string.media_delete_failed,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        openFragment(holder.itemView.context)
-                    }
-                }
-                alertDialog.setNegativeButton(R.string.no) { dialog, which ->
-                    dialog.dismiss()
-                }
-                alertDialog.show()
-            }
-        }
-
     }
 
-    private fun hideProgress(context: Context) {
-        val hideIntent = Intent("com.erensekkeli.roomieconnect.PROFILE_FRAGMENT_HIDE_PROGRESS_BAR")
-        hideIntent.putExtra("actionType", "hide")
-        LocalBroadcastManager.getInstance(context).sendBroadcast(hideIntent)
-    }
-
-    private fun openFragment(context: Context) {
-        val openIntent = Intent("com.erensekkeli.roomieconnect.PROFILE_FRAGMENT_HIDE_PROGRESS_BAR")
-        openIntent.putExtra("actionType", "open")
-        LocalBroadcastManager.getInstance(context).sendBroadcast(openIntent)
-    }
 }

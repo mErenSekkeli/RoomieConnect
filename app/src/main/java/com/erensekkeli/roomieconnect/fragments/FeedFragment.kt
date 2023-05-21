@@ -12,9 +12,11 @@ import com.erensekkeli.roomieconnect.R
 import com.erensekkeli.roomieconnect.adapters.MediaListAdapter
 import com.erensekkeli.roomieconnect.databinding.FragmentFeedBinding
 import com.erensekkeli.roomieconnect.models.Media
+import com.erensekkeli.roomieconnect.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -24,7 +26,8 @@ class FeedFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private lateinit var recyclerView: RecyclerView
-    private var mediaList: ArrayList<Media> = ArrayList()
+    private var userList: ArrayList<User> = ArrayList()
+    private var userStatus: Int? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentFeedBinding.inflate(inflater, container, false)
@@ -39,25 +42,49 @@ class FeedFragment : Fragment() {
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.setHasFixedSize(false);
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = MediaListAdapter(mediaList, 0)
+        recyclerView.adapter = MediaListAdapter(userList, 0)
 
         binding.addNewMediaButton.setOnClickListener {
             goToCreateMedia(view)
         }
         getProcessAnimation()
 
-        firestore.collection("UserMedia").get()
-            .addOnSuccessListener { documents ->
-                for(document in documents) {
-                    val media = Media(document.id, document.getString("email"), document.getString("title"), document.getString("description"), document.getString("mediaUrl"), document.getString("mediaType"), document.getTimestamp("date"))
-                    mediaList.add(media)
+        firestore.collection("UserData").whereEqualTo("email", auth.currentUser!!.email!!)
+            .get().addOnSuccessListener {
+                val document = it.documents[0]
+                userStatus = document.getLong("status")?.toInt() ?: 0
+                var collection: Query = firestore.collection("UserData")
+                if(userStatus == 1) {
+                    collection = collection.whereEqualTo("status", 2)
+                }else if (userStatus == 2) {
+                    collection = collection.whereEqualTo("status", 1)
                 }
-                binding.mediaRecyclerView.adapter?.notifyDataSetChanged()
-                removeProcessAnimation()
-            }.addOnFailureListener {
-                Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_LONG).show()
-                removeProcessAnimation()
+
+                collection.get().addOnSuccessListener { documents ->
+
+                    if(documents != null) {
+                        for(document in documents) {
+                            val name = document.getString("name") ?: ""
+                            val surname = document.getString("surname") ?: ""
+                            val contactMail = document.getString("contactMail") ?: ""
+                            val contactPhone = document.getString("contactPhone") ?: ""
+                            val department = document.getString("department") ?: "-"
+                            val status = document.getLong("status")?.toInt() ?: 0
+                            val campusDistance = document.getLong("campusDistance")?.toInt() ?: 0
+                            val gradeYear = document.getLong("gradeYear")?.toInt() ?: 0
+                            val homeTime = document.getLong("homeTime")?.toInt() ?: 0
+                            val profileImage = document.getString("profileImage")
+
+                            val user = User(name!!, surname!!, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
+                            userList.add(user)
+                        }
+                        recyclerView.adapter?.notifyDataSetChanged()
+                        removeProcessAnimation()
+                    }
+                }
             }
+
+
     }
 
     private fun getProcessAnimation() {
@@ -67,7 +94,7 @@ class FeedFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         getProcessAnimation()
-        mediaList.clear()
+        userList.clear()
     }
 
     private fun removeProcessAnimation() {

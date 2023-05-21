@@ -17,6 +17,7 @@ import com.erensekkeli.roomieconnect.R
 import com.erensekkeli.roomieconnect.adapters.MediaListAdapter
 import com.erensekkeli.roomieconnect.databinding.FragmentProfileBinding
 import com.erensekkeli.roomieconnect.models.Media
+import com.erensekkeli.roomieconnect.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,7 +32,7 @@ class ProfileFragment : Fragment() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
     private lateinit var recyclerView: RecyclerView
-    private var mediaList: ArrayList<Media> = ArrayList()
+    private var userList: ArrayList<User> = ArrayList()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -45,7 +46,7 @@ class ProfileFragment : Fragment() {
         storage = Firebase.storage
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = MediaListAdapter(mediaList, 1)
+        recyclerView.adapter = MediaListAdapter(userList, 1)
 
         getData()
 
@@ -74,39 +75,11 @@ class ProfileFragment : Fragment() {
             transaction.addToBackStack(null)
             transaction.commit()
         }
-
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: android.content.Context?, intent: android.content.Intent?) {
-                val actionType = intent?.getStringExtra("actionType")
-                if(actionType == "hide") {
-                    getProcessAnimation()
-                }else if(actionType == "open") {
-                    removeProcessAnimation()
-                }
-
-            }
-        }
-
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, android.content.IntentFilter("com.erensekkeli.roomieconnect.PROFILE_FRAGMENT_HIDE_PROGRESS_BAR"))
-
-        getProcessAnimation()
-        firestore.collection("UserMedia").whereEqualTo("email", auth.currentUser!!.email!!).get()
-            .addOnSuccessListener { documents ->
-                for(document in documents) {
-                    val media = Media(document.id, document.getString("email"), document.getString("title"), document.getString("description"), document.getString("mediaUrl"), document.getString("mediaType"), document.getTimestamp("date"))
-                    mediaList.add(media)
-                }
-                binding.recyclerView.adapter?.notifyDataSetChanged()
-                removeProcessAnimation()
-            }.addOnFailureListener {
-                Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_LONG).show()
-                removeProcessAnimation()
-            }
     }
 
     override fun onResume() {
         super.onResume()
-        mediaList.clear()
+        userList.clear()
         getData()
     }
 

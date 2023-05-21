@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="@string/search_people_to_contact"
+        android:text="@string/filter_people"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,10 +23,11 @@
         android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="539dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,40 +37,49 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/nameOrSurnameSearch"
+                android:id="@+id/campusDistanceMinSearch"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
                 android:background="@drawable/input_border"
-                android:hint="@string/name_or_surname"
-                android:inputType="text" />
+                android:hint="@string/campus_distance_min_summ"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/campusDistanceMaxSearch"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/input_border"
+                android:hint="@string/campus_distance_max_summ"
+                android:inputType="number" />
 
             <Spinner
-                android:id="@+id/countrySpinner"
+                android:id="@+id/statusSpinner"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/input_border"
-                android:entries="@array/country_names"
+                android:entries="@array/student_status"
                 android:spinnerMode="dropdown"></Spinner>
 
             <EditText
-                android:id="@+id/citySearch"
+                android:id="@+id/numberOfDaysMinSearch"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/input_border"
-                android:hint="@string/city"
-                android:inputType="text" />
+                android:hint="@string/number_days_min"
+                android:inputType="number" />
 
             <EditText
-                android:id="@+id/graduationDateSearch"
+                android:id="@+id/numberOfDaysMaxSearch"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/input_border"
-                android:hint="@string/date_format_graduate"
-                android:inputType="date" />
+                android:hint="@string/number_days_max"
+                android:inputType="number" />
 
 
             <Button
@@ -79,8 +89,7 @@
                 android:layout_margin="20dp"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/turquoise"
-                android:onClick="searchUser"
-                android:text="@string/search_for_contact" />
+                android:text="@string/search" />
         </LinearLayout>
 
 

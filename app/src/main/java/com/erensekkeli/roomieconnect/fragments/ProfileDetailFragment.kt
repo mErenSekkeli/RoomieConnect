@@ -3,6 +3,7 @@ package com.erensekkeli.roomieconnect.fragments
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -131,14 +132,6 @@ class ProfileDetailFragment : Fragment() {
         binding.progressContainer.visibility = View.INVISIBLE
     }
 
-    override fun onResume() {
-        super.onResume()
-        getData(object: UserDataCallback {
-            override fun onUserDataLoaded(user: User) {
-                initializeData()
-            }
-        })
-    }
 }
 
 interface UserDataCallback {

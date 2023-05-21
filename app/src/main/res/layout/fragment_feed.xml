@@ -37,7 +37,7 @@
             android:layout_gravity="center_vertical"
             android:textColor="@color/purple"
             android:fontFamily="sans-serif-light"
-            android:text="@string/grad_connect" />
+            android:text="@string/roomie_connect" />
 
     </androidx.cardview.widget.CardView>
 
