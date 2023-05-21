@@ -1,6 +1,7 @@
 package com.erensekkeli.roomieconnect.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -40,24 +41,14 @@ class SearchResultFragment : Fragment() {
         binding.searchResultItemList.layoutManager = LinearLayoutManager(context)
         binding.searchResultItemList.adapter = SearchResultAdapter(userList)
 
-        val nameSurname: String? = arguments?.getString("nameSurname")
-        var name: String? = null
-        var surname: String? = null
-
+        val campusDistanceMin = arguments?.getInt("campusDistanceMin")
+        val campusDistanceMax = arguments?.getInt("campusDistanceMax")
+        val numberOfDaysMin = arguments?.getInt("numberOfDaysMin")
+        val numberOfDaysMax = arguments?.getInt("numberOfDaysMax")
+        val statusIndex= arguments?.getInt("statusIndex")
         getProcessAnimation()
 
-        if(nameSurname != null && nameSurname.contains(" ")) {
-            val lastSpaceIndex = nameSurname.lastIndexOf(" ")
-            name = nameSurname.substring(0, lastSpaceIndex)
-            surname = nameSurname.substring(lastSpaceIndex + 1)
-        }
-
-        var country: String? = arguments?.getString("country")
-        var city: String? = arguments?.getString("city")
-
-        val graduateDate: String? = arguments?.getString("graduateDate")
-
-        if(nameSurname == null && country == null && city == null && graduateDate == null) {
+        if(campusDistanceMin == null && campusDistanceMax == null && numberOfDaysMin == null && numberOfDaysMax == null && statusIndex == null) {
             Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
             removeProcessAnimation()
             getBack()
@@ -67,22 +58,20 @@ class SearchResultFragment : Fragment() {
         var collection: Query = firestore.collection("UserData")
 
 
-        if(name != null && surname != null) {
-            collection = collection.whereEqualTo("name", name)
-
-            collection = collection.whereEqualTo("surname", surname)
-        } else if(nameSurname != null) {
-            collection = collection.whereEqualTo("name", nameSurname)
+        if(campusDistanceMin != null && campusDistanceMin != 0) {
+            collection = collection.whereGreaterThanOrEqualTo("campusDistance", campusDistanceMin)
         }
-
-        if(country != null) {
-            collection = collection.whereEqualTo("country", country)
+        if(campusDistanceMax != null && campusDistanceMax != 0) {
+            collection = collection.whereLessThanOrEqualTo("campusDistance", campusDistanceMax)
         }
-        if(city != null) {
-            collection = collection.whereEqualTo("city", city)
+        if(numberOfDaysMin != null && numberOfDaysMin != 0) {
+            collection = collection.whereGreaterThanOrEqualTo("homeTime", numberOfDaysMin)
         }
-        if(graduateDate != null) {
-            collection = collection.whereEqualTo("graduationDate", graduateDate)
+        if(numberOfDaysMax != null && numberOfDaysMax != 0) {
+            collection = collection.whereLessThanOrEqualTo("homeTime", numberOfDaysMax)
+        }
+        if(statusIndex != null) {
+            collection = collection.whereEqualTo("status", statusIndex)
         }
 
         collection.get().addOnSuccessListener { documents ->
@@ -98,10 +87,10 @@ class SearchResultFragment : Fragment() {
                 val contactMail = document.getString("contactMail")
                 val contactPhone = document.getString("contactPhone")
                 val department = document.getString("department")
-                val status = document.getString("status").toString().toInt()
-                val campusDistance = document.getString("campusDistance").toString().toInt()
-                val gradeYear = document.getString("gradeYear").toString().toInt()
-                val homeTime = document.getString("homeTime").toString().toInt()
+                val status = document.getLong("status")?.toInt()
+                val campusDistance = document.getLong("campusDistance")?.toInt()
+                val gradeYear = document.getLong("gradeYear")?.toInt()
+                val homeTime = document.getLong("homeTime")?.toInt()
                 val profileImage = document.getString("profileImage")
 
                 val user = User(name!!, surname!!, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
@@ -110,7 +99,8 @@ class SearchResultFragment : Fragment() {
             binding.searchResultItemList.adapter?.notifyDataSetChanged()
             removeProcessAnimation()
         }.addOnFailureListener { exception ->
-            Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
+            Log.d("SearchResultFragment", exception.localizedMessage!!)
+            Toast.makeText(context, exception.localizedMessage, Toast.LENGTH_SHORT).show()
             removeProcessAnimation()
             getBack()
         }

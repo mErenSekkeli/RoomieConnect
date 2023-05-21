@@ -9,6 +9,7 @@ import com.erensekkeli.roomieconnect.fragments.ProfileFragment
 import com.erensekkeli.roomieconnect.R
 import com.erensekkeli.roomieconnect.fragments.SearchFragment
 import com.erensekkeli.roomieconnect.databinding.ActivityFeedBinding
+import com.erensekkeli.roomieconnect.fragments.MapFragment
 import com.erensekkeli.roomieconnect.fragments.ProfileDetailFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -36,8 +37,8 @@ class FeedActivity : AppCompatActivity() {
                 R.id.home -> {
                     replaceFragment(FeedFragment(), "FeedFragment")
                 }
-                R.id.announcement -> {
-                    replaceFragment(AnnouncementFragment(), "AnnouncementFragment")
+                R.id.map -> {
+                    replaceFragment(MapFragment(), "MapFragment")
                 }
                 R.id.search -> {
                     replaceFragment(SearchFragment(), "SearchFragment")

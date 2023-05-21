@@ -40,8 +40,8 @@ class ProfileDetailAdapter(private val data: HashMap<String, String?>): Recycler
 
         if(key == "Contact Mail" && value != null && value != "-" && value != "") {
             holder.binding.cardItem.setOnClickListener {
-                val subject = R.string.mail_subject.toString()
-                val body = R.string.mail_body.toString()
+                val subject = holder.itemView.context.getString(R.string.mail_subject)
+                val body = holder.itemView.context.getString(R.string.mail_body)
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
                     data = Uri.parse("mailto:$value?subject=$subject&body=$body")
                     putExtra(Intent.EXTRA_EMAIL, arrayOf(value))

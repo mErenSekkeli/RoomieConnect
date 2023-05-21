@@ -35,8 +35,12 @@ class SearchResultAdapter(val userList: ArrayList<User>): RecyclerView.Adapter<S
         }else {
             Glide.with(holder.itemView.context).load(R.drawable.app_icon).into(holder.binding.profileImageResult)
         }
-        holder.binding.contactPhoneResult.text = userList[position].contactPhone
-        holder.binding.contactMailResult.text = userList[position].contactMail
+        holder.binding.statusResult.text = when(userList[position].status) {
+            0 -> "Hi! I'm " + holder.itemView.context.getString(R.string.status_0)
+            1 -> "Hi! I'm " + holder.itemView.context.getString(R.string.status_1)
+            2 -> "Hi! I'm " + holder.itemView.context.getString(R.string.status_2)
+            else -> "Hi! I'm " + holder.itemView.context.getString(R.string.status_0)
+        }
         holder.binding.departmentResult.text = userList[position].department
         holder.binding.gradeYearResult.text = userList[position].gradeYear.toString()
         holder.itemView.setOnClickListener {

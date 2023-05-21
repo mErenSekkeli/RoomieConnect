@@ -129,11 +129,11 @@ Uygulamamızla, rastgele oda arkadaşı atamalarının veya seri ilanlar aracıl
     <string name="date_format_entry">Giriş Yılı dd/MM/yyyy</string>
     <string name="date_format_graduate">Mezun Yılı dd/MM/yyyy</string>
     <string name="mail_subject">Selamlar</string>
-    <string name="mail_body">Profilinizle ilgileniyorum. Lütfen bana ulaşın.</string>
+    <string name="mail_body">Teklifinizle ilgileniyorum. Lütfen bana ulaşın.</string>
     <string name="no_mail_app">Mail uygulaması bulunamadı</string>
     <string name="no_phone_app">Telefon uygulaması bulunamadı</string>
     <string name="main">Ana Sayfa</string>
-    <string name="announcements">Duyurular</string>
+    <string name="map">Harita</string>
     <string name="creator">Oluşturan: </string>
     <string name="deadline">Son Tarih: </string>
     <string name="create_announcement">Yeni Bir Duyuru Oluştur</string>
@@ -143,7 +143,7 @@ Uygulamamızla, rastgele oda arkadaşı atamalarının veya seri ilanlar aracıl
     <string name="create">Oluştur</string>
     <string name="announcement_created">Duyuru Başarıyla Oluşturuldu</string>
     <string name="announcement_create_failed">Duyuru Oluşturulamadı</string>
-    <string name="search_people_to_contact">İletişim Kurmak İçin Arayın</string>
+    <string name="filter_people">İnsanları Filtreleyin</string>
     <string name="create_media">Yeni Bir Medya Oluştur</string>
     <string name="description">Açıklama</string>
     <string name="image_or_video">Resim veya Video</string>
@@ -156,7 +156,7 @@ Uygulamamızla, rastgele oda arkadaşı atamalarının veya seri ilanlar aracıl
     <string name="media_delete_failed">Medya Silinemedi</string>
     <string name="delete_media">Medyayı Sil</string>
     <string name="delete_media_message">Bu medyayı silmek istediğinizden emin misiniz?</string>
-    <string name="grad_connect">GradConnect</string>
+    <string name="roomie_connect">RoomieConnect</string>
     <string name="grade_year">Sınıf Yılı</string>
     <string name="status_0">Ev/oda Aramıyorum</string>
     <string name="status_1">Ev/oda Arıyorum</string>
@@ -164,11 +164,19 @@ Uygulamamızla, rastgele oda arkadaşı atamalarının veya seri ilanlar aracıl
     <string name="send_mail_again">Maili Tekrar Gönder</string>
     <string name="email_not_verified">Mail Adresiniz Doğrulanmadı. Lütfen Mail Adresinizi Doğrulayın.</string>
     <string name="campus_distance">Kampüse Olan/İstenen Uzaklık</string>
+    <string name="campus_distance_min_summ">Minimum Uzaklık (km)</string>
+    <string name="campus_distance_max_summ">Maksimum Uzaklık (km)</string>
     <string name="home_time">Evde kalacağı/paylaşabileceği süre (Gün Sayısı)</string>
-
-
-
-
-
+    <string name="number_days_min">Gün Sayısı (Min)</string>
+    <string name="number_days_max">Gün Sayısı (Max)</string>
+    <string name="update_current_location">Şuanki Konumunu Güncelle</string>
+    <string name="find_house_map">Haritada Ev Bul</string>
+    <string name="give_location_permission">Konum İzni Verin</string>
+    <string name="location_updated">Konum Başarıyla Güncellendi</string>
+    <string name="location_update_failed">Konum Güncellenemedi</string>
+    <string name="your_location">Konumunuz</string>
+    <string name="ytu">Yıldız Teknik Üniversitesi</string>
+    <string name="house">Ev</string>
+    <string name="hi">Merhaba! Ben </string>
 
 </resources>
