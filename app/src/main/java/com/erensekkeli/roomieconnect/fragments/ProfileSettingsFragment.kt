@@ -245,7 +245,6 @@ class ProfileSettingsFragment : Fragment(), PasswordChangeDialog.PasswordChangeD
                 binding.statusSpinner.setSelection(status)
                 binding.gradeYearField.setText(gradeYear.toString())
                 binding.homeTimeField.setText(homeTime.toString())
-                binding.campusDistance.setText(campusDistance.toString())
             }
             removeProcessAnimation()
         }.addOnFailureListener { exception ->
@@ -326,7 +325,6 @@ class ProfileSettingsFragment : Fragment(), PasswordChangeDialog.PasswordChangeD
         val status = statusIndex
         val gradeYear = binding.gradeYearField.text.toString().toInt()
         val homeTime = binding.homeTimeField.text.toString().toInt()
-        val campusDistance = binding.campusDistance.text.toString().toInt()
         val contactPhone = binding.contactPhoneField.text.toString()
         val contactMail = binding.contactMailField.text.toString()
 
@@ -347,7 +345,6 @@ class ProfileSettingsFragment : Fragment(), PasswordChangeDialog.PasswordChangeD
                         "status" to status,
                         "gradeYear" to gradeYear,
                         "homeTime" to homeTime,
-                        "campusDistance" to campusDistance,
                         "contactPhone" to contactPhone,
                         "contactMail" to contactMail
                     )
