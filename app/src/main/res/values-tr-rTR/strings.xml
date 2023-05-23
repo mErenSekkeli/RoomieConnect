@@ -164,19 +164,26 @@ Uygulamamızla, rastgele oda arkadaşı atamalarının veya seri ilanlar aracıl
     <string name="send_mail_again">Maili Tekrar Gönder</string>
     <string name="email_not_verified">Mail Adresiniz Doğrulanmadı. Lütfen Mail Adresinizi Doğrulayın.</string>
     <string name="campus_distance">Kampüse Olan/İstenen Uzaklık</string>
-    <string name="campus_distance_min_summ">Minimum Uzaklık (km)</string>
-    <string name="campus_distance_max_summ">Maksimum Uzaklık (km)</string>
+    <string name="campus_distance_min_summ">Minimum Uzaklık (metre)</string>
+    <string name="campus_distance_max_summ">Maksimum Uzaklık (metre)</string>
     <string name="home_time">Evde kalacağı/paylaşabileceği süre (Gün Sayısı)</string>
     <string name="number_days_min">Gün Sayısı (Min)</string>
     <string name="number_days_max">Gün Sayısı (Max)</string>
     <string name="update_current_location">Şuanki Konumunu Güncelle</string>
     <string name="find_house_map">Haritada Ev Bul</string>
+    <string name="set_house_map">Haritada Ev Belirle</string>
     <string name="give_location_permission">Konum İzni Verin</string>
     <string name="location_updated">Konum Başarıyla Güncellendi</string>
     <string name="location_update_failed">Konum Güncellenemedi</string>
     <string name="your_location">Konumunuz</string>
     <string name="ytu">Yıldız Teknik Üniversitesi</string>
     <string name="house">Ev</string>
+    <string name="set_house">Ev Belirle</string>
     <string name="hi">Merhaba! Ben </string>
+    <string name="map_detail_long_press_1">Haritada ev ikonlarına basarak ev seçebilirsiniz.</string>
+    <string name="map_detail_long_press_2">Haritaya uzun basarak ev konumunu ayarlayabilirsiniz.</string>
+    <string name="set_house_location">Lütfen Önce Evin Konumunu Seçin.</string>
+    <string name="house_location_set">Ev Konumu Ayarlandı.</string>
+    <string name="filter_distance">Kampüsten Eve Uzaklığı Filtrele</string>
 
 </resources>

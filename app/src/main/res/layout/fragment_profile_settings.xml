@@ -168,24 +168,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="300dp"
-                android:layout_margin="10dp"
-                android:layout_height="wrap_content"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/campusDistance"
-                    android:text="@string/empty_string"
-                    android:textSize="15dp"
-                    android:hint="@string/campus_distance"
-                    android:inputType="number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

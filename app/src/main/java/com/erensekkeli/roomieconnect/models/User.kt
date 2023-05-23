@@ -3,7 +3,7 @@ package com.erensekkeli.roomieconnect.models
 import java.io.Serializable
 
 class User(name: String, surname: String, contactMail: String?, contactPhone: String?, department: String?, status: Int?, profileImage: String?, campusDistance: Int?,
-            gradeYear: Int?, homeTime: Int?, ): Serializable {
+            gradeYear: Int?, homeTime: Int?): Serializable {
 
     val name: String = name
     val surname: String = surname

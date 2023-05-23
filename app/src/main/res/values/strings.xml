@@ -164,18 +164,26 @@ With our app, you can say goodbye to the stress of random roommate assignments o
     <string name="send_mail_again">Send Mail Again</string>
     <string name="email_not_verified">Email Not Verified. Please Verify Your Email.</string>
     <string name="campus_distance">Distance to/desired from campus</string>
-    <string name="campus_distance_min_summ">Min Distance From Campus(km)</string>
-    <string name="campus_distance_max_summ">Max Distance From Campus(km)</string>
+    <string name="campus_distance_min_summ">Min Distance From Campus(meter)</string>
+    <string name="campus_distance_max_summ">Max Distance From Campus(meter)</string>
     <string name="home_time">Time to stay/share at home (number of days)</string>
     <string name="number_days_min">Number of Days (Min)</string>
     <string name="number_days_max">Number of Days (Max)</string>
     <string name="update_current_location">Update Current Location</string>
     <string name="find_house_map">Find a house on the map</string>
+    <string name="set_house_map">Set house on the map</string>
     <string name="give_location_permission">Give Location Permission</string>
     <string name="location_updated">Location Updated</string>
     <string name="location_update_failed">Location Update Failed</string>
     <string name="your_location">Your Location</string>
     <string name="ytu">Yildiz Technical University</string>
     <string name="house">House</string>
+    <string name="set_house">Set House</string>
     <string name="hi">Hi! I\'m </string>
+    <string name="map_detail_long_press_1">You can select a house by pressing the house icons on the map.</string>
+    <string name="map_detail_long_press_2">You can set the home location by long pressing the map.</string>
+    <string name="set_house_location">Please First Set House Location</string>
+    <string name="house_location_set">Home location has set</string>
+    <string name="filter_distance">Filter distance from campus to home</string>
+
 </resources>

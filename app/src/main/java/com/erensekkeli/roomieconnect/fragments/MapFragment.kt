@@ -35,6 +35,7 @@ class MapFragment : Fragment() {
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private lateinit var requestedPermission: String
+    private var studentStatus: Int? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentMapBinding.inflate(inflater, container, false)
@@ -51,6 +52,19 @@ class MapFragment : Fragment() {
         binding.findHouseMapButton.setOnClickListener {
             getMap()
         }
+
+        firestore.collection("UserData").whereEqualTo("email", auth.currentUser!!.email).get().addOnSuccessListener {
+            val document = it.documents[0]
+            studentStatus = document.getLong("status")!!.toInt()
+            if(studentStatus == 2) {
+                binding.findHouseMapButton.text = getString(R.string.set_house_map)
+            }else {
+                binding.findHouseMapButton.text = getString(R.string.find_house_map)
+            }
+        }.addOnFailureListener {
+            Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun registerLauncher() {
@@ -131,6 +145,15 @@ class MapFragment : Fragment() {
     }
 
     private fun getMap() {
+        val distanceFilter = binding.distanceFilter.text.toString().toIntOrNull()
+        val bundle = Bundle()
+        bundle.putInt("studentStatus", studentStatus!!)
+        if(distanceFilter != null)
+            bundle.putInt("distanceFilter", distanceFilter)
+
+        val mapDetailFragment = MapDetailFragment()
+        mapDetailFragment.arguments = bundle
+
         val transaction = parentFragmentManager.beginTransaction()
         transaction.setCustomAnimations(
             R.anim.enter_right_to_left,
@@ -138,7 +161,7 @@ class MapFragment : Fragment() {
             R.anim.enter_left_to_right,
             R.anim.exit_left_to_right
         )
-        transaction.replace(R.id.feedContainerFragment, MapDetailFragment())
+        transaction.replace(R.id.feedContainerFragment, mapDetailFragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
