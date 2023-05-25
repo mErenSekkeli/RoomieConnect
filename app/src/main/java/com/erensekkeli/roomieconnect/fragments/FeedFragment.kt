@@ -44,9 +44,6 @@ class FeedFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = MediaListAdapter(userList, 0)
 
-        binding.addNewMediaButton.setOnClickListener {
-            goToCreateMedia(view)
-        }
         getProcessAnimation()
 
         firestore.collection("UserData").whereEqualTo("email", auth.currentUser!!.email!!)
@@ -64,6 +61,7 @@ class FeedFragment : Fragment() {
 
                     if(documents != null) {
                         for(document in documents) {
+                            val email = document.getString("email") ?: ""
                             val name = document.getString("name") ?: ""
                             val surname = document.getString("surname") ?: ""
                             val contactMail = document.getString("contactMail") ?: ""
@@ -75,15 +73,25 @@ class FeedFragment : Fragment() {
                             val homeTime = document.getLong("homeTime")?.toInt() ?: 0
                             val profileImage = document.getString("profileImage")
 
-                            val user = User(name!!, surname!!, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
+                            val user = User(email, name, surname, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
                             userList.add(user)
                         }
                         recyclerView.adapter?.notifyDataSetChanged()
                         removeProcessAnimation()
                     }
                 }
+
+                firestore.collection("MatchRequests").whereEqualTo("receiver", auth.currentUser!!.email).whereEqualTo("requestStatus", 0).get()
+                    .addOnSuccessListener {
+                        if (it.documents.size > 0) {
+                            binding.getNotificationsBtn.setImageResource(R.drawable.has_notification)
+                        }
+                    }
             }
 
+        binding.getNotificationsBtn.setOnClickListener {
+            getNotifications(view)
+        }
 
     }
 
@@ -93,7 +101,6 @@ class FeedFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        getProcessAnimation()
         userList.clear()
     }
 
@@ -101,7 +108,7 @@ class FeedFragment : Fragment() {
         binding.progressContainer.visibility = View.INVISIBLE
     }
 
-    private fun goToCreateMedia(view: View) {
+    private fun getNotifications(view: View) {
         val transaction = parentFragmentManager.beginTransaction()
         transaction.setCustomAnimations(
             R.anim.enter_right_to_left,
@@ -109,7 +116,7 @@ class FeedFragment : Fragment() {
             R.anim.enter_left_to_right,
             R.anim.exit_left_to_right
         )
-        transaction.replace(R.id.feedContainerFragment, CreateMediaFragment())
+        transaction.replace(R.id.feedContainerFragment, AnnouncementFragment())
         transaction.addToBackStack(null)
         transaction.commit()
     }

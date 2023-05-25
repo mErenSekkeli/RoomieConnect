@@ -13,12 +13,15 @@ import com.erensekkeli.roomieconnect.R
 import com.erensekkeli.roomieconnect.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth = Firebase.auth
+        firestore= Firebase.firestore
 
         val intent = intent
         val email = intent.getBooleanExtra("verification", false)
@@ -111,7 +115,7 @@ class MainActivity : AppCompatActivity() {
         val currentUser = auth.currentUser
 
         if(currentUser != null) {
-            currentUser?.reload()?.addOnCompleteListener { task ->
+            currentUser.reload().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     if (currentUser.isEmailVerified) {
                         auth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
@@ -120,11 +124,19 @@ class MainActivity : AppCompatActivity() {
                             val intent = Intent(this@MainActivity, FeedActivity::class.java)
                             intent.flags =
                                 Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            sharedPreferences?.edit()
+                            sharedPreferences.edit()
                                 ?.putBoolean("remindMe", binding.remindMeCheckBox.isChecked)
                                 ?.apply()
-                            startActivity(intent)
-                            finish()
+                            firestore.collection("UserData").whereEqualTo("email", auth.currentUser!!.email).get()
+                                .addOnSuccessListener {
+                                    val document = it.documents[0]
+                                    sharedPreferences.edit().putInt("status", document.getLong("status")!!.toInt()).apply()
+                                    startActivity(intent)
+                                    finish()
+                                }.addOnFailureListener {
+                                    Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
+                                    removeProcessAnimation()
+                                }
                         }.addOnFailureListener {
                             Toast.makeText(this, R.string.login_failed, Toast.LENGTH_SHORT).show()
                             removeProcessAnimation()
@@ -148,6 +160,13 @@ class MainActivity : AppCompatActivity() {
                 sharedPreferences?.edit()
                     ?.putBoolean("remindMe", binding.remindMeCheckBox.isChecked)
                     ?.apply()
+                firestore.collection("UserData").whereEqualTo("email", auth.currentUser!!.email).get()
+                    .addOnSuccessListener {
+                        val document = it.documents[0]
+                        sharedPreferences.edit().putInt("status", document.getLong("status")!!.toInt()).apply()
+                    }.addOnFailureListener {
+                        Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
+                    }
                 startActivity(intent)
                 finish()
             }.addOnFailureListener {

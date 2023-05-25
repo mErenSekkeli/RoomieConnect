@@ -3,12 +3,14 @@ package com.erensekkeli.roomieconnect.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,13 +32,15 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 
-class MediaListAdapter(val userList: ArrayList<User>, var fragmentType: Int = 0): RecyclerView.Adapter<MediaListAdapter.MediaViewHolder>(){
+class MediaListAdapter(private val userList: ArrayList<User>, var fragmentType: Int = 0): RecyclerView.Adapter<MediaListAdapter.MediaViewHolder>(){
 
+    private lateinit var sharedPreferences: SharedPreferences
 
     class MediaViewHolder(val binding: SearchResultItemBinding): RecyclerView.ViewHolder(binding.root) {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
+        sharedPreferences = parent.context.getSharedPreferences("com.erensekkeli.roomieconnect", Context.MODE_PRIVATE)
         val binding = SearchResultItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MediaViewHolder(binding)
     }
@@ -65,6 +69,9 @@ class MediaListAdapter(val userList: ArrayList<User>, var fragmentType: Int = 0)
         holder.itemView.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable("user", userList[position])
+            val studentStatus = sharedPreferences.getInt("status", 0)
+            if(studentStatus == 1)
+                bundle.putBoolean("isMatchRequest", true)
             val fragment = ProfileDetailFragment()
             fragment.arguments = bundle
             val transaction = (holder.itemView.context as FeedActivity).supportFragmentManager.beginTransaction()

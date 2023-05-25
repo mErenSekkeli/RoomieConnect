@@ -138,14 +138,15 @@ class MapDetailFragment : Fragment() {
             )
         }
 
-        //set on click listener for map
-        googleMap.setOnMapLongClickListener {
-            if(houseMarker != null) {
-                houseMarker!!.remove()
-            }
-            houseMarker = googleMap.addMarker(MarkerOptions().position(it).title(fragmentContext.getString(R.string.house)).icon(BitmapDescriptorFactory.fromResource(R.drawable.house_icon)))
-            if(userMarker != null) {
-                binding.setHouseLocationBtn.visibility = View.VISIBLE
+        if(studentStatus == 2) {
+            googleMap.setOnMapLongClickListener {
+                if(houseMarker != null) {
+                    houseMarker!!.remove()
+                }
+                houseMarker = googleMap.addMarker(MarkerOptions().position(it).title(fragmentContext.getString(R.string.house)).icon(BitmapDescriptorFactory.fromResource(R.drawable.house_icon)))
+                if(userMarker != null) {
+                    binding.setHouseLocationBtn.visibility = View.VISIBLE
+                }
             }
         }
 
@@ -168,6 +169,7 @@ class MapDetailFragment : Fragment() {
                 firestore.collection("UserData").whereEqualTo("email", userEmail)
                     .get().addOnSuccessListener {
                         val document = it.documents[0]
+                        val email = document.getString("email")
                         val name = document.getString("name")
                         val surname = document.getString("surname")
                         val contactMail = document.getString("contactMail")
@@ -178,8 +180,12 @@ class MapDetailFragment : Fragment() {
                         val gradeYear = document.getLong("gradeYear")?.toInt()
                         val homeTime = document.getLong("homeTime")?.toInt()
                         val profileImage = document.getString("profileImage")
-                        val user = User(name!!, surname!!, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
+                        val user = User(email, name!!, surname!!, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
                         val bundle = Bundle()
+
+                        if(studentStatus == 1)
+                            bundle.putBoolean("isMatchRequest", true)
+
                         bundle.putSerializable("user", user)
                         val fragment = ProfileDetailFragment()
                         fragment.arguments = bundle
@@ -196,6 +202,14 @@ class MapDetailFragment : Fragment() {
                     }.addOnFailureListener {
                         Toast.makeText(requireContext(), R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
                     }
+            }else {
+                if(marker.title == fragmentContext.getString(R.string.your_location)) {
+                    Toast.makeText(fragmentContext, R.string.your_location, Toast.LENGTH_SHORT).show()
+                }else if(marker.title == fragmentContext.getString(R.string.house)) {
+                    Toast.makeText(fragmentContext, R.string.house, Toast.LENGTH_SHORT).show()
+                }else {
+                    Toast.makeText(fragmentContext, R.string.ytu, Toast.LENGTH_SHORT).show()
+                }
             }
             true
         }
@@ -222,7 +236,7 @@ class MapDetailFragment : Fragment() {
         //get status from bundle
         val bundle = arguments
         if(bundle != null) {
-            studentStatus = bundle.getInt("status")
+            studentStatus = bundle.getInt("studentStatus")
             if(studentStatus == 2) {
                 Toast.makeText(fragmentContext, R.string.map_detail_long_press_2, Toast.LENGTH_LONG).show()
             }else {

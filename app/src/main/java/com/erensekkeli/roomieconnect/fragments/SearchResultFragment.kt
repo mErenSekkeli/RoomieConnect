@@ -82,6 +82,7 @@ class SearchResultFragment : Fragment() {
                 return@addOnSuccessListener
             }
             for(document in documents) {
+                val email = document.getString("email")
                 val name = document.getString("name")
                 val surname = document.getString("surname")
                 val contactMail = document.getString("contactMail")
@@ -93,7 +94,7 @@ class SearchResultFragment : Fragment() {
                 val homeTime = document.getLong("homeTime")?.toInt()
                 val profileImage = document.getString("profileImage")
 
-                val user = User(name!!, surname!!, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
+                val user = User(email, name!!, surname!!, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
                 userList.add(user)
             }
             binding.searchResultItemList.adapter?.notifyDataSetChanged()

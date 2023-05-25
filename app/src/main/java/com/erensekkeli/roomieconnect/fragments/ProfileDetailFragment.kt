@@ -1,14 +1,12 @@
 package com.erensekkeli.roomieconnect.fragments
 
 
-import android.net.Uri
+import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +29,7 @@ class ProfileDetailFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
+    private var isMatchRequest = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentProfileDetailBinding.inflate(inflater, container, false)
@@ -64,10 +63,44 @@ class ProfileDetailFragment : Fragment() {
             @Suppress("DEPRECATION")
             user = arguments?.getSerializable("user") as User
             initializeData()
+            isMatchRequest = arguments?.getBoolean("isMatchRequest", false)!!
+            if(isMatchRequest) {
+                binding.sendMatchRequestBtn.visibility = View.VISIBLE
+            }
         }
 
         binding.backBtn.setOnClickListener {
             getBack()
+        }
+
+        if(isMatchRequest){
+            getProcessAnimation()
+            firestore.collection("MatchRequests").whereEqualTo("sender", auth.currentUser!!.email).whereEqualTo("receiver", user.email).get()
+                .addOnSuccessListener {
+                    if(it.documents.size > 0) {
+                        binding.sendMatchRequestBtn.visibility = View.GONE
+                        binding.alreadySent.visibility = View.VISIBLE
+                    }
+                    removeProcessAnimation()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_LONG).show()
+                    removeProcessAnimation()
+                }
+
+            binding.sendMatchRequestBtn.setOnClickListener {
+                sendMatchRequest()
+            }
+        }
+
+        binding.alreadySent.setOnClickListener {
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle(R.string.match_request)
+            builder.setMessage(R.string.already_sent_match_request)
+            builder.setPositiveButton(R.string.ok) { dialog, _ ->
+                dialog.dismiss()
+            }
+            builder.show()
         }
     }
 
@@ -99,6 +132,7 @@ class ProfileDetailFragment : Fragment() {
         usersCollection.whereEqualTo("email", auth.currentUser!!.email!!).get().addOnSuccessListener { documents ->
             if(documents != null && !documents.isEmpty) {
                 val document = documents.documents[0]
+                val email = document.get("email") as String
                 val name = document.get("name") as String
                 val surname = document.get("surname") as String
                 val profilePicture = document.get("profileImage")?.toString() ?: ""
@@ -109,17 +143,40 @@ class ProfileDetailFragment : Fragment() {
                 val campusDistance = document.get("campusDistance")?.toString()?.toInt() ?: 0
                 val gradeYear = document.get("gradeYear")?.toString()?.toInt() ?: 0
                 val homeTime = document.get("homeTime")?.toString()?.toInt() ?: 0
-                user = User(name, surname, contactMail, contactPhone, department, status, profilePicture, campusDistance, gradeYear, homeTime)
+                user = User(email, name, surname, contactMail, contactPhone, department, status, profilePicture, campusDistance, gradeYear, homeTime)
                 callback.onUserDataLoaded(user)
                 removeProcessAnimation()
             }
         }.addOnFailureListener {
             Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_LONG).show()
-            user = User("","","","","",0,"",0,0,0)
+            user = User("" ,"","","","","",0,"",0,0,0)
             callback.onUserDataLoaded(user)
             removeProcessAnimation()
         }
     }
+
+    private fun sendMatchRequest() {
+        val alertDialog = AlertDialog.Builder(context)
+        alertDialog.setTitle(R.string.match_request)
+        alertDialog.setMessage(R.string.match_request_message)
+        alertDialog.setPositiveButton(R.string.yes) { _, _ ->
+            val matchRequestsCollection = firestore.collection("MatchRequests")
+            val matchRequest = hashMapOf(
+                "sender" to auth.currentUser!!.email!!,
+                "receiver" to user.email,
+                "requestStatus" to 0
+            )
+            matchRequestsCollection.add(matchRequest).addOnSuccessListener {
+                Toast.makeText(context, R.string.match_request_sent, Toast.LENGTH_LONG).show()
+                getBack()
+            }.addOnFailureListener {
+                Toast.makeText(context, R.string.match_request_failed, Toast.LENGTH_LONG).show()
+            }
+        }
+        alertDialog.setNegativeButton(R.string.no) { _, _ -> }
+        alertDialog.show()
+    }
+
     private fun getBack() {
         val fragmentManager = activity?.supportFragmentManager
         fragmentManager?.popBackStack()
