@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.erensekkeli.roomieconnect.R
 import com.erensekkeli.roomieconnect.databinding.ProfileDetailItemBinding
@@ -38,6 +39,10 @@ class ProfileDetailAdapter(private val data: HashMap<String, String?>): Recycler
             }
         }
 
+        if(key == "Campus Distance" && value != null) {
+            holder.binding.content.text = value.toString() + " " + holder.itemView.context.getString(R.string.meter)
+        }
+
         if(key == "Contact Mail" && value != null && value != "-" && value != "") {
             holder.binding.cardItem.setOnClickListener {
                 val subject = holder.itemView.context.getString(R.string.mail_subject)
@@ -58,14 +63,34 @@ class ProfileDetailAdapter(private val data: HashMap<String, String?>): Recycler
 
         if (key == "Contact Phone" && value != null && value != "-" && value != "") {
             holder.binding.cardItem.setOnClickListener {
-                val intent = Intent(Intent.ACTION_DIAL).apply {
-                    data = Uri.parse("tel:$value")
+                val alertDialog = AlertDialog.Builder(holder.itemView.context)
+                alertDialog.setTitle(R.string.contact)
+                alertDialog.setMessage(R.string.contact_message)
+
+                alertDialog.setPositiveButton(R.string.call) { _, _ ->
+                    val intent = Intent(Intent.ACTION_DIAL).apply {
+                        data = Uri.parse("tel:$value")
+                    }
+                    try{
+                        holder.itemView.context.startActivity(intent)
+                    } catch (e: Exception) {
+                        Toast.makeText(holder.itemView.context, R.string.no_phone_app, Toast.LENGTH_SHORT).show()
+                    }
                 }
-                try{
-                    holder.itemView.context.startActivity(intent)
-                } catch (e: Exception) {
-                    Toast.makeText(holder.itemView.context, R.string.no_phone_app, Toast.LENGTH_SHORT).show()
+
+                alertDialog.setNegativeButton(R.string.whatsapp) { _, _ ->
+                    val body = holder.itemView.context.getString(R.string.mail_body)
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse("https://api.whatsapp.com/send?phone=$value&text=${Uri.encode(body)}")
+                    }
+                    intent.setPackage("com.whatsapp")
+                    try{
+                        holder.itemView.context.startActivity(intent)
+                    } catch (e: Exception) {
+                        Toast.makeText(holder.itemView.context, R.string.no_whatsapp_app, Toast.LENGTH_SHORT).show()
+                    }
                 }
+                alertDialog.show()
             }
         }
 

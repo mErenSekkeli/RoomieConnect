@@ -16,18 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
-        <ImageView
-            android:id="@+id/addNewMediaButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="right"
-            android:layout_marginTop="6dp"
-            android:layout_margin="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/baseline_add_a_photo_24" />
-
         <TextView
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
@@ -38,6 +26,14 @@
             android:textColor="@color/purple"
             android:fontFamily="sans-serif-light"
             android:text="@string/roomie_connect" />
+
+        <ImageView
+            android:id="@+id/getNotificationsBtn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="6dp"
+            app:srcCompat="@drawable/not_notification" />
 
     </androidx.cardview.widget.CardView>
 

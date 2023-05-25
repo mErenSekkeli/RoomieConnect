@@ -2,9 +2,10 @@ package com.erensekkeli.roomieconnect.models
 
 import java.io.Serializable
 
-class User(name: String, surname: String, contactMail: String?, contactPhone: String?, department: String?, status: Int?, profileImage: String?, campusDistance: Int?,
+class User(email: String?, name: String, surname: String, contactMail: String?, contactPhone: String?, department: String?, status: Int?, profileImage: String?, campusDistance: Int?,
             gradeYear: Int?, homeTime: Int?): Serializable {
 
+    val email: String? = email
     val name: String = name
     val surname: String = surname
     val contactMail: String? = contactMail

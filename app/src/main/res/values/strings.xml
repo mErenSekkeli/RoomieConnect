@@ -132,6 +132,7 @@ With our app, you can say goodbye to the stress of random roommate assignments o
     <string name="mail_body">I am interested in your offer. Please contact me.</string>
     <string name="no_mail_app">No Mail App Found</string>
     <string name="no_phone_app">No Phone App Found</string>
+    <string name="no_whatsapp_app">No Whatsapp App Found</string>
     <string name="main">Main</string>
     <string name="map">Map</string>
     <string name="creator">Creator: </string>
@@ -185,5 +186,23 @@ With our app, you can say goodbye to the stress of random roommate assignments o
     <string name="set_house_location">Please First Set House Location</string>
     <string name="house_location_set">Home location has set</string>
     <string name="filter_distance">Filter distance from campus to home</string>
-
+    <string name="meter">Meters</string>
+    <string name="contact">Contact</string>
+    <string name="contact_message">You can contact with Phone or Whatsapp</string>
+    <string name="call">Call</string>
+    <string name="whatsapp">Whatsapp</string>
+    <string name="match_request">Match Request</string>
+    <string name="match_request_message">Are you sure you want to send match request?</string>
+    <string name="match_request_sent">Match Request Sent Successfully</string>
+    <string name="match_request_failed">Match Request Failed</string>
+    <string name="already_sent_match_request">You have already sent a match request to this user</string>
+    <string name="ok">Okey</string>
+    <string name="accept_request">Accept Request</string>
+    <string name="accept_request_message">Are you sure you want to accept this request?</string>
+    <string name="request_accepted">Request Accepted Successfully</string>
+    <string name="request_not_accepted">Request Not Accepted</string>
+    <string name="reject_request">Reject Request</string>
+    <string name="reject_request_message">Are you sure you want to reject this request?</string>
+    <string name="request_rejected">Request Rejected Successfully</string>
+    <string name="request_not_rejected">Request Not Rejected</string>
 </resources>

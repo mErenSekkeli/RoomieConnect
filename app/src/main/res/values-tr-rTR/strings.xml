@@ -132,6 +132,7 @@ Uygulamamızla, rastgele oda arkadaşı atamalarının veya seri ilanlar aracıl
     <string name="mail_body">Teklifinizle ilgileniyorum. Lütfen bana ulaşın.</string>
     <string name="no_mail_app">Mail uygulaması bulunamadı</string>
     <string name="no_phone_app">Telefon uygulaması bulunamadı</string>
+    <string name="no_whatsapp_app">Whatsapp uygulaması bulunamadı</string>
     <string name="main">Ana Sayfa</string>
     <string name="map">Harita</string>
     <string name="creator">Oluşturan: </string>
@@ -185,5 +186,23 @@ Uygulamamızla, rastgele oda arkadaşı atamalarının veya seri ilanlar aracıl
     <string name="set_house_location">Lütfen Önce Evin Konumunu Seçin.</string>
     <string name="house_location_set">Ev Konumu Ayarlandı.</string>
     <string name="filter_distance">Kampüsten Eve Uzaklığı Filtrele</string>
-
+    <string name="meter">Metre</string>
+    <string name="contact">İletişime Geç</string>
+    <string name="contact_message">Telefonla veya Whatsapp İle İletişime Geçebilirsiniz.</string>
+    <string name="call">Ara</string>
+    <string name="whatsapp">Whatsapp</string>
+    <string name="match_request">Eşleşme İsteği</string>
+    <string name="match_request_message">Eşleşme isteği göndermek istediğinizden emin misiniz?</string>
+    <string name="match_request_sent">Eşleşme İsteği Başarıyla Gönderildi</string>
+    <string name="match_request_failed">Eşleşme İsteği Gönderilemedi</string>
+    <string name="already_sent_match_request">Bu kullanıcıya zaten eşleşme isteği gönderdin.</string>
+    <string name="ok">Tamam</string>
+    <string name="accept_request">İsteği Kabul Et</string>
+    <string name="accept_request_message">Eşleşme isteğini kabul etmek istediğinizden emin misiniz?</string>
+    <string name="request_accepted">Eşleşme İsteği Başarıyla Kabul Edildi</string>
+    <string name="request_not_accepted">Eşleşme İsteği Kabul Edilmedi</string>
+    <string name="reject_request">İsteği Reddet</string>
+    <string name="reject_request_message">Eşleşme isteğini reddetmek istediğinizden emin misiniz?</string>
+    <string name="request_rejected">Eşleşme İsteği Başarıyla Reddedildi</string>
+    <string name="request_not_rejected">Eşleşme İsteği Reddedilmedi</string>
 </resources>
