@@ -1,21 +1,29 @@
 package com.erensekkeli.roomieconnect.activities
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import com.erensekkeli.roomieconnect.R
 import com.erensekkeli.roomieconnect.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +31,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private lateinit var sharedPreferences: SharedPreferences
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+        } else {
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +47,8 @@ class MainActivity : AppCompatActivity() {
         auth = Firebase.auth
         firestore= Firebase.firestore
 
-        val intent = intent
+        requestPermission()
+
         val email = intent.getBooleanExtra("verification", false)
 
         if(email) {
@@ -54,12 +70,32 @@ class MainActivity : AppCompatActivity() {
         if(remindMe) {
             val currentUser = auth.currentUser
             if(currentUser != null && currentUser.isEmailVerified) {
-                val intent = Intent(this@MainActivity, FeedActivity::class.java)
-                startActivity(intent)
+                val isNotification = intent.getBooleanExtra("requestSent", false)
+                val newIntent = Intent(this@MainActivity, FeedActivity::class.java)
+                if(isNotification) {
+                    Toast.makeText(this, "From Notification", Toast.LENGTH_LONG).show()
+                    newIntent.putExtra("requestSent", true)
+                }
+                startActivity(newIntent)
                 finish()
             }
         }
 
+    }
+
+    private fun requestPermission() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+            }else if(shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                Snackbar.make(binding.root, R.string.give_permission, Snackbar.LENGTH_INDEFINITE).setAction(R.string.give_permission) {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }.show()
+            }else {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
     }
 
     fun goSignUp(view: View) {
@@ -101,6 +137,7 @@ class MainActivity : AppCompatActivity() {
         binding.root.removeViewAt(binding.root.childCount - 1)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     fun signIn(view: View) {
         hideKeyboard()
         val email = binding.emailInputForLogin.text.toString()
@@ -130,6 +167,9 @@ class MainActivity : AppCompatActivity() {
                             firestore.collection("UserData").whereEqualTo("email", auth.currentUser!!.email).get()
                                 .addOnSuccessListener {
                                     val document = it.documents[0]
+                                        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+                                            firestore.collection("UserData").document(document.id).update("fcmToken", it)
+                                        }
                                     sharedPreferences.edit().putInt("status", document.getLong("status")!!.toInt()).apply()
                                     startActivity(intent)
                                     finish()
@@ -160,9 +200,13 @@ class MainActivity : AppCompatActivity() {
                 sharedPreferences?.edit()
                     ?.putBoolean("remindMe", binding.remindMeCheckBox.isChecked)
                     ?.apply()
+
                 firestore.collection("UserData").whereEqualTo("email", auth.currentUser!!.email).get()
                     .addOnSuccessListener {
                         val document = it.documents[0]
+                        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+                            firestore.collection("UserData").document(document.id).update("fcmToken", it)
+                        }
                         sharedPreferences.edit().putInt("status", document.getLong("status")!!.toInt()).apply()
                     }.addOnFailureListener {
                         Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()

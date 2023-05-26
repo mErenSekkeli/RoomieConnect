@@ -205,4 +205,11 @@ Uygulamamızla, rastgele oda arkadaşı atamalarının veya seri ilanlar aracıl
     <string name="reject_request_message">Eşleşme isteğini reddetmek istediğinizden emin misiniz?</string>
     <string name="request_rejected">Eşleşme İsteği Başarıyla Reddedildi</string>
     <string name="request_not_rejected">Eşleşme İsteği Reddedilmedi</string>
+    <string name="have_new_match_request">Yeni bir eşleşme isteğiniz var!</string>
+    <string name="have_new_match_request_message">Tıkla ve eşleşme isteğini kabul et veya reddet.</string>
+    <string name="match_request_accepted">Eşleşme İsteği Kabul Edildi</string>
+    <string name="match_request_rejected">Eşleşme İsteği Reddedildi</string>
+    <string name="match_request_accepted_message">Eşleşme isteğinizi kabul etti.</string>
+    <string name="match_request_rejected_message">Eşleşme isteğinizi reddetti.</string>
+
 </resources>

@@ -24,7 +24,6 @@ class SearchResultAdapter(val userList: ArrayList<User>): RecyclerView.Adapter<S
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserHolder {
-        Toast.makeText(parent.context, "onCreateViewHolder", Toast.LENGTH_SHORT).show()
         sharedPreferences = parent.context.getSharedPreferences("com.erensekkeli.roomieconnect", Context.MODE_PRIVATE)
         val binding = SearchResultItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return UserHolder(binding)

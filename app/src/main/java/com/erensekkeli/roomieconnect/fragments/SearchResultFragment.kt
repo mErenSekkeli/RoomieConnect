@@ -85,6 +85,7 @@ class SearchResultFragment : Fragment() {
                 val email = document.getString("email")
                 val name = document.getString("name")
                 val surname = document.getString("surname")
+                val fcmToken = document.get("fcmToken") as String?
                 val contactMail = document.getString("contactMail")
                 val contactPhone = document.getString("contactPhone")
                 val department = document.getString("department")
@@ -94,13 +95,12 @@ class SearchResultFragment : Fragment() {
                 val homeTime = document.getLong("homeTime")?.toInt()
                 val profileImage = document.getString("profileImage")
 
-                val user = User(email, name!!, surname!!, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
+                val user = User(email, name!!, surname!!, fcmToken, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
                 userList.add(user)
             }
             binding.searchResultItemList.adapter?.notifyDataSetChanged()
             removeProcessAnimation()
         }.addOnFailureListener { exception ->
-            Log.d("SearchResultFragment", exception.localizedMessage!!)
             Toast.makeText(context, exception.localizedMessage, Toast.LENGTH_SHORT).show()
             removeProcessAnimation()
             getBack()

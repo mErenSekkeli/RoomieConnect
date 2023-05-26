@@ -32,6 +32,11 @@ class FeedActivity : AppCompatActivity() {
 
         replaceFragment(FeedFragment(), "FeedFragment")
 
+        val isNotification = intent.getBooleanExtra("requestSent", false)
+        if(isNotification) {
+            replaceFragment(AnnouncementFragment(), "AnnouncementFragment")
+        }
+
         binding.bottomNavigationBar.setOnItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.home -> {

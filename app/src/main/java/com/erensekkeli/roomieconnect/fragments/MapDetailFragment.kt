@@ -172,6 +172,7 @@ class MapDetailFragment : Fragment() {
                         val email = document.getString("email")
                         val name = document.getString("name")
                         val surname = document.getString("surname")
+                        val fcmToken = document.get("fcmToken") as String?
                         val contactMail = document.getString("contactMail")
                         val contactPhone = document.getString("contactPhone")
                         val department = document.getString("department")
@@ -180,7 +181,7 @@ class MapDetailFragment : Fragment() {
                         val gradeYear = document.getLong("gradeYear")?.toInt()
                         val homeTime = document.getLong("homeTime")?.toInt()
                         val profileImage = document.getString("profileImage")
-                        val user = User(email, name!!, surname!!, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
+                        val user = User(email, name!!, surname!!, fcmToken, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
                         val bundle = Bundle()
 
                         if(studentStatus == 1)
