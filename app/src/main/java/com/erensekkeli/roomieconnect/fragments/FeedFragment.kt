@@ -64,6 +64,7 @@ class FeedFragment : Fragment() {
                             val email = document.getString("email") ?: ""
                             val name = document.getString("name") ?: ""
                             val surname = document.getString("surname") ?: ""
+                            val fcmToken = document.get("fcmToken") as String?
                             val contactMail = document.getString("contactMail") ?: ""
                             val contactPhone = document.getString("contactPhone") ?: ""
                             val department = document.getString("department") ?: "-"
@@ -73,7 +74,7 @@ class FeedFragment : Fragment() {
                             val homeTime = document.getLong("homeTime")?.toInt() ?: 0
                             val profileImage = document.getString("profileImage")
 
-                            val user = User(email, name, surname, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
+                            val user = User(email, name, surname, fcmToken, contactMail, contactPhone, department, status, profileImage, campusDistance, gradeYear, homeTime)
                             userList.add(user)
                         }
                         recyclerView.adapter?.notifyDataSetChanged()

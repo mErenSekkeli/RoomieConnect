@@ -27,6 +27,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
@@ -205,18 +206,22 @@ class SignUpActivity : AppCompatActivity() {
                         postMap["profileImage"] = downloadUrl
                         postMap["gradeYear"] = binding.gradeYear.text.toString().toInt()
                         val spinIndex = resources.getStringArray(R.array.student_status).indexOf(binding.statusSpinner.selectedItem.toString())
-                        postMap["studentStatus"] = spinIndex
-                        firestore.collection("UserData").add(postMap).addOnSuccessListener {
-                            Toast.makeText(this, R.string.registration_successful, Toast.LENGTH_SHORT).show()
-                            removeProcessAnimation()
-                            val intent = Intent(this@SignUpActivity, MainActivity::class.java)
-                            intent.putExtra("verification", true)
-                            startActivity(intent)
-                            finish()
-                        }.addOnFailureListener { exception ->
-                            Toast.makeText(this, exception.localizedMessage, Toast.LENGTH_SHORT).show()
-                            removeProcessAnimation()
+                        postMap["status"] = spinIndex
+                        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+                            postMap["fcmToken"] = it
+                            firestore.collection("UserData").add(postMap).addOnSuccessListener {
+                                Toast.makeText(this, R.string.registration_successful, Toast.LENGTH_SHORT).show()
+                                removeProcessAnimation()
+                                val intent = Intent(this@SignUpActivity, MainActivity::class.java)
+                                intent.putExtra("verification", true)
+                                startActivity(intent)
+                                finish()
+                            }.addOnFailureListener { exception ->
+                                Toast.makeText(this, exception.localizedMessage, Toast.LENGTH_SHORT).show()
+                                removeProcessAnimation()
+                            }
                         }
+
                     }
                 }.addOnFailureListener { exception ->
                     Toast.makeText(this, exception.localizedMessage, Toast.LENGTH_SHORT).show()
@@ -235,16 +240,19 @@ class SignUpActivity : AppCompatActivity() {
                     else -> 0
                 }
 
-                firestore.collection("UserData").add(postMap).addOnSuccessListener {
-                    Toast.makeText(this, R.string.registration_successful, Toast.LENGTH_SHORT).show()
-                    removeProcessAnimation()
-                    val intent = Intent(this@SignUpActivity, MainActivity::class.java)
-                    intent.putExtra("verification", true)
-                    startActivity(intent)
-                    finish()
-                }.addOnFailureListener { exception ->
-                    Toast.makeText(this, exception.localizedMessage, Toast.LENGTH_SHORT).show()
-                    removeProcessAnimation()
+                FirebaseMessaging.getInstance().token.addOnSuccessListener {
+                    postMap["fcmToken"] = it
+                    firestore.collection("UserData").add(postMap).addOnSuccessListener {
+                        Toast.makeText(this, R.string.registration_successful, Toast.LENGTH_SHORT).show()
+                        removeProcessAnimation()
+                        val intent = Intent(this@SignUpActivity, MainActivity::class.java)
+                        intent.putExtra("verification", true)
+                        startActivity(intent)
+                        finish()
+                    }.addOnFailureListener { exception ->
+                        Toast.makeText(this, exception.localizedMessage, Toast.LENGTH_SHORT).show()
+                        removeProcessAnimation()
+                    }
                 }
             }
         }.addOnFailureListener { exception ->
