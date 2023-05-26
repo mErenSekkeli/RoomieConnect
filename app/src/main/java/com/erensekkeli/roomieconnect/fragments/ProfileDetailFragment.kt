@@ -36,7 +36,7 @@ import org.json.JSONObject
 import java.io.IOException
 import java.util.UUID
 
-const val SERVER_KEY = "AAAAyPbnwLc:APA91bEAQEQ2tB2xmw-ox6x8GYY_BEpOfcARJg_Zng-DS-t98vuGcgTcWB0Ih1OiD3tSngaewuypZPUiaqaRc_qxqG0rvD9HlP_fDUoRecBxR397u97CJjnW1sQJ-bhciuI_fsoYAdFq"
+const val SERVER_KEY = "YOUR_SERVER_KEY"
 class ProfileDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileDetailBinding
