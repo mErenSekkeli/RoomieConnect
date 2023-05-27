@@ -21,10 +21,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.NotificationParams
 import com.google.firebase.messaging.RemoteMessage
-import com.google.firebase.messaging.RemoteMessage.Notification
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -34,9 +31,8 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
-import java.util.UUID
 
-const val SERVER_KEY = "YOUR_SERVER_KEY"
+const val SERVER_KEY = "AAAAyPbnwLc:APA91bEAQEQ2tB2xmw-ox6x8GYY_BEpOfcARJg_Zng-DS-t98vuGcgTcWB0Ih1OiD3tSngaewuypZPUiaqaRc_qxqG0rvD9HlP_fDUoRecBxR397u97CJjnW1sQJ-bhciuI_fsoYAdFq"
 class ProfileDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileDetailBinding

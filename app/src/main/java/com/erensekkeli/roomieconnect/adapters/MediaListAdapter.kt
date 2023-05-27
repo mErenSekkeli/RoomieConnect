@@ -2,35 +2,19 @@ package com.erensekkeli.roomieconnect.adapters
 
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.erensekkeli.roomieconnect.R
 import com.erensekkeli.roomieconnect.activities.FeedActivity
-import com.erensekkeli.roomieconnect.databinding.MediaItemBinding
 import com.erensekkeli.roomieconnect.databinding.SearchResultItemBinding
-import com.erensekkeli.roomieconnect.fragments.MediaDetailFragment
 import com.erensekkeli.roomieconnect.fragments.ProfileDetailFragment
-import com.erensekkeli.roomieconnect.models.Media
 import com.erensekkeli.roomieconnect.models.User
-import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 
 class MediaListAdapter(private val userList: ArrayList<User>, var fragmentType: Int = 0): RecyclerView.Adapter<MediaListAdapter.MediaViewHolder>(){
 

@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.erensekkeli.roomieconnect.fragments.AnnouncementFragment
 import com.erensekkeli.roomieconnect.fragments.FeedFragment
-import com.erensekkeli.roomieconnect.fragments.ProfileFragment
 import com.erensekkeli.roomieconnect.R
 import com.erensekkeli.roomieconnect.fragments.SearchFragment
 import com.erensekkeli.roomieconnect.databinding.ActivityFeedBinding
