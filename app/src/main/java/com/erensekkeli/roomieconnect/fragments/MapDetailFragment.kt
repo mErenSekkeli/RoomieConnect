@@ -10,7 +10,6 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import androidx.fragment.app.Fragment
-
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -22,7 +21,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.erensekkeli.roomieconnect.R
-import com.erensekkeli.roomieconnect.activities.FeedActivity
 import com.erensekkeli.roomieconnect.databinding.FragmentMapDetailBinding
 import com.erensekkeli.roomieconnect.models.User
 import com.google.android.gms.location.LocationServices
@@ -41,7 +39,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
